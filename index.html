@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Budget League Hub</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+
   <style>
     html, body {
       margin: 0;
@@ -21,9 +23,72 @@
       display: block;
       background: #03131f;
     }
+    #appLoader {
+  position: fixed;
+  inset: 0;
+  background: #03131f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-emblem {
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 24px rgba(0, 255, 200, 0.18);
+}
+
+.loader-ring {
+  position: absolute;
+  width: 156px;
+  height: 156px;
+  border-radius: 50%;
+  border: 5px solid rgba(255,255,255,0.08);
+  border-top-color: #18e7ff;
+  border-right-color: #31f5a9;
+  animation: hubSpin 1.15s linear infinite;
+}
+
+.loader-text {
+  position: absolute;
+  bottom: 6px;
+  width: 260px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(225,235,245,0.92);
+}
+
+@keyframes hubSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
+    <div id="appLoader">
+        <div class="loader-wrap">
+          <img src="favicon.png" alt="Budget League Emblem" class="loader-emblem">
+          <div class="loader-ring"></div>
+          <div class="loader-text">Loading Budget League Hub...</div>
+        </div>
+      </div>
   <iframe
     class="app-frame"
     src="https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec?page=hub"
@@ -32,5 +97,19 @@
     referrerpolicy="no-referrer"
     allowfullscreen>
   </iframe>
+  <script>
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("appLoader");
+    
+      setTimeout(() => {
+        loader.style.opacity = "0";
+        loader.style.transition = "opacity 0.4s ease";
+    
+        setTimeout(() => {
+          loader.style.display = "none";
+        }, 400);
+      }, 500);
+    });
+    </script>
 </body>
 </html>
