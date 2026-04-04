@@ -239,6 +239,9 @@
           if (data.label) loaderText.textContent = data.label;
           setProgress(84);
           showFrameShell();
+          window.setTimeout(() => {
+            if (!loaderFinished) finishLoader();
+          }, 180);
         }
 
         if (data.type === 'battle-log-ready') {
