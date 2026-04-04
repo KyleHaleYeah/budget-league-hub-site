@@ -4,24 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Budget League — Battle Log</title>
-
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="theme-color" content="#06111f">
 
   <style>
     :root {
       --bg: #06111f;
       --accent: #31f5a9;
       --primary: #5aa8ff;
+      --gold: #f3c96d;
       --text: #edf7ff;
+      --muted: #9eb7cf;
     }
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       height: 100vh;
-      overflow: hidden;
       font-family: Inter, system-ui, sans-serif;
-      background: #06111f;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(36,131,255,.16), transparent 20%),
+        radial-gradient(circle at 85% 10%, rgba(8,77,173,.22), transparent 22%),
+        linear-gradient(180deg, #06101d 0%, #04111f 100%);
+      overflow: hidden;
     }
 
     iframe {
@@ -38,74 +45,109 @@
       opacity: 1;
     }
 
-    /* Loader */
+    /* ======================
+       LOADER
+    ====================== */
+
     .loader {
       position: fixed;
       inset: 0;
       display: grid;
       place-items: center;
-      background: #06111f;
+      background: rgba(3,10,18,.96);
       z-index: 10;
-      transition: opacity .4s ease;
+      transition: opacity .4s ease, visibility .4s ease;
     }
 
     .loader.hidden {
       opacity: 0;
-      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .loader-box {
+      width: min(90vw, 320px);
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(90,168,255,.2);
+      background: rgba(7,17,31,.96);
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,.45);
     }
 
     .spinner {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 16px;
       border-radius: 50%;
       border: 4px solid rgba(255,255,255,.08);
       border-top-color: var(--accent);
       border-right-color: var(--primary);
-      animation: spin .9s linear infinite;
+      animation: spin 0.9s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    .title {
-      margin-top: 16px;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text);
+    .loader-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .loader-sub {
+      font-size: 12px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .loader-copy {
+      font-size: 13px;
+      color: var(--muted);
     }
   </style>
 </head>
 
 <body>
 
+  <!-- Loader -->
   <div id="loader" class="loader">
-    <div>
+    <div class="loader-box">
       <div class="spinner"></div>
-      <div class="title">Loading Battle Log</div>
+      <div class="loader-sub">Budget League</div>
+      <div class="loader-title">Loading Battle Log</div>
+      <div class="loader-copy">Preparing submission tools…</div>
     </div>
   </div>
 
+  <!-- App iframe -->
   <iframe id="appFrame"></iframe>
 
   <script>
-    const APP_URL = "https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec?page=battle-log";
+    const APP_URL = "https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec?page=battle-log&embed=github";
 
     const iframe = document.getElementById("appFrame");
     const loader = document.getElementById("loader");
 
+    // Load iframe
     iframe.src = APP_URL;
 
+    // Fade in when loaded
     iframe.onload = () => {
       iframe.classList.add("loaded");
-      setTimeout(() => loader.classList.add("hidden"), 300);
+
+      setTimeout(() => {
+        loader.classList.add("hidden");
+      }, 300);
     };
 
-    // fallback
+    // Failsafe loader removal (in case onload is slow or blocked)
     setTimeout(() => {
-      iframe.classList.add("loaded");
       loader.classList.add("hidden");
-    }, 5000);
+      iframe.classList.add("loaded");
+    }, 4000);
   </script>
 
 </body>
