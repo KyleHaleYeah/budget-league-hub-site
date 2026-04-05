@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Budget League Hub</title>
+  <!-- index_html_v1.2 -->
   <link rel="icon" type="image/png" href="favicon.png">
 
   <style>
@@ -152,7 +153,7 @@
   <iframe
     class="app-frame"
     id="hubFrame"
-    src="https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec?page=hub"
+    src="about:blank"
     title="Budget League Hub"
     loading="eager"
     referrerpolicy="no-referrer"
@@ -164,6 +165,11 @@
       const loaderText = document.getElementById("loaderText");
       const progressFill = document.getElementById("loaderProgressFill");
       const hubFrame = document.getElementById("hubFrame");
+      const webAppBaseUrl = "https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec";
+      const requestedPage = (new URLSearchParams(window.location.search).get("page") || "hub").trim().toLowerCase();
+      const allowedPages = new Set(["hub", "leaderboard", "dashboard", "standings", "theme", "welcome", "guide", "welcome-guide", "tournament"]);
+      const resolvedPage = allowedPages.has(requestedPage) ? requestedPage : "hub";
+      hubFrame.src = webAppBaseUrl + "?page=" + encodeURIComponent(resolvedPage);
 
       let progressValue = 6;
       let loaderFinished = false;
