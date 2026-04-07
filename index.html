@@ -153,7 +153,8 @@
   <iframe
     class="app-frame"
     id="hubFrame"
-    src="about:blank"
+    src="https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec?page=hub"
+    data-app-base="https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec"
     title="Budget League Hub"
     loading="eager"
     referrerpolicy="no-referrer"
@@ -165,11 +166,15 @@
       const loaderText = document.getElementById("loaderText");
       const progressFill = document.getElementById("loaderProgressFill");
       const hubFrame = document.getElementById("hubFrame");
-      const webAppBaseUrl = "https://script.google.com/macros/s/AKfycbxT0_fZxHmfW7wZBWYV1E4jTarliajWzaDmdlYFYeiYMzd9eLzWVsY6Oq-08Yu8gGqPrg/exec";
-      const requestedPage = (new URLSearchParams(window.location.search).get("page") || "hub").trim().toLowerCase();
+      const requestedPageRaw = new URL(window.location.href).searchParams.get("page") || "hub";
       const allowedPages = new Set(["hub", "leaderboard", "dashboard", "standings", "theme", "welcome", "guide", "welcome-guide", "tournament"]);
-      const resolvedPage = allowedPages.has(requestedPage) ? requestedPage : "hub";
-      hubFrame.src = webAppBaseUrl + "?page=" + encodeURIComponent(resolvedPage);
+      const requestedPage = allowedPages.has(String(requestedPageRaw).trim().toLowerCase())
+        ? String(requestedPageRaw).trim().toLowerCase()
+        : "hub";
+      const appBase = hubFrame.getAttribute("data-app-base") || "";
+      if (appBase) {
+        hubFrame.src = appBase + "?page=" + encodeURIComponent(requestedPage);
+      }
 
       let progressValue = 6;
       let loaderFinished = false;
